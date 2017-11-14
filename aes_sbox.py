@@ -44,8 +44,10 @@ def sub(byte, encrypt = True):
         dst = S_IN
     # make sure encoding for byte is correct
     tmpByte = hex(int(byte, 16)).upper().replace('X','x')
+    if len(tmpByte) != 4:
+        tmpByte = tmpByte[:2] + '0' + tmpByte[2:]
     index = src.find(tmpByte)
-    return dst[index:index+len(tmpByte)]
+    return dst[index + 2:index+len(tmpByte)]
 
 def main():
     for i in range(int(len(S_IN) / 4)):

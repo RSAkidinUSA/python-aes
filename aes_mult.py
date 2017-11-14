@@ -2,12 +2,13 @@
 # aes_mult.py code for the multiplication for aes
 aes_b = 0b100011011
 
+# takes an integer base and x and does modz
 def modz(x, b=aes_b):
     while len(bin(x)) >= len(bin(b)):
         x = x ^ (b << (len(bin(x)) - len(bin(b))))
     return x
 
-#takes two hex numbers as strings, returns hex mult mod b
+# takes two hex numbers as strings, returns hex mult mod b
 def multiply(x, y, b=aes_b):
     ix = int(x,16)
     by = bin(int(y,16))
