@@ -1,4 +1,4 @@
-#/bin/python3
+#/usr/bin/python3
 # aes_mult.py code for the multiplication for aes
 aes_b = 0b100011011
 

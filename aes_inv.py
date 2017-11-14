@@ -1,4 +1,4 @@
-#/bin/python3
+#/usr/bin/python3
 # aes_inv.py code for the inverse for aes
 from aes_mult import aes_b, modz, multiply
 
