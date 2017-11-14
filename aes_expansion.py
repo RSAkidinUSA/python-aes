@@ -1,6 +1,7 @@
 #/usr/bin/python3
 # aes_expansion.py code for computing the key expansion for aes
 from aes_inv import inverse
+from aes_sbox import sub
 
 # provide the user with a hex key of one of the correct lengths
 def expand(key):
