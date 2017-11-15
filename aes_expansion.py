@@ -6,11 +6,10 @@ from aes_sbox import sub
 
 # key expansion core for 4byte string (hex)
 # round num increments each call, starting at 00000010
-roundnum = 0
+roundNum = 0
 def core(val):
-    global roundnum
-    roundnum = roundnum + 1
-    RCon = modz(1 << roundnum)
+    global roundNum
+    RCon = modz(1 << roundNum)
     val = val[2:] + val[:2]
     ret = ''
     for i in range(4):
@@ -20,11 +19,12 @@ def core(val):
             temp = temp[2:]
         temp = '0' * (2 - len(temp)) + temp
         ret = ret + temp
-        
+    
+    roundNum = roundNum + 1
     return ret
     
 
-# provide the user with a hex key of one of the correct lengths
+# Take an input key of a 128, 192, or 256 bits and return an array of round keys
 def expand(key):
     try:
         test = int(key, 16)        
@@ -39,12 +39,12 @@ def expand(key):
     # 16 byte keys, 1 byte = 2 chars
     expKeyLen = (numRounds + 1) * 16 * 2
     
-    print("Key length: %d\nNumber of rounds %d:" \
+    print("Key length: %d\nNumber of rounds: %d" \
           %(keylen, numRounds))
     
     expKey = key
-    global roundnum
-    roundnum = 0
+    global roundNum
+    roundNum = 0
     # max value of j from key expansion loop
     iterMax = 4 + (numRounds - 10)
     while len(expKey) < expKeyLen:
@@ -63,7 +63,12 @@ def expand(key):
             xor = hex(int(temp1, 16) ^ int(temp2, 16))[2:]
             xor = '0' * (8 - len(xor)) + xor
             expKey = expKey + xor
+    expKey = expKey[:expKeyLen]
     print("Expanded key length: %d" % (len(expKey) / 2,))
+    roundKeys = []
+    for i in range(numRounds):
+        roundKeys.append(expKey[i*32:(i+1)*32])
+        print("Round: %d, Key: %s" % (i, roundKeys[i]))
     return expKey
     
     
