@@ -36,7 +36,10 @@ def inverse(x, b=aes_b):
         ix = tempr
         tempq, tempr = divide(ix, tempdiv)
 
-    return hex(EEA(q_list))
+    ret = hex(EEA(q_list))[2:].upper()
+    if len(ret) % 2:
+        ret = '0' + ret
+    return ret
         
 
 def main():

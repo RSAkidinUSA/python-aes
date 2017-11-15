@@ -21,8 +21,10 @@ def multiply(x, y, b=aes_b):
 
     # mod b
     ret = modz(ret, b)
-    
-    return hex(ret)
+    ret = hex(ret)[2:].upper()
+    if len(ret) % 2:
+        ret = '0' + ret
+    return ret
 
 def main():
     x = '0x3B'
