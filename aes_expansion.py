@@ -11,15 +11,9 @@ def core(val):
     global roundNum
     RCon = modz(1 << roundNum)
     val = val[2:] + val[:2]
-    ret = ''
-    for i in range(4):
-        temp = sub(val[(i*2):(i*2)+2])
-        if (i == 0):
-            temp = hex(int(temp, 16) ^ RCon).upper()
-            temp = temp[2:]
-        temp = '0' * (2 - len(temp)) + temp
-        ret = ret + temp
-    
+    ret = sub(val)
+    swap = hex(int(ret[:2], 16) ^ RCon).upper()[2:]
+    ret = swap + ret[2:]
     roundNum = roundNum + 1
     return ret
     
@@ -54,10 +48,7 @@ def expand(key):
             if i == 0:
                 temp1 = core(temp1)
             if (i == 4) and (iterMax == 8):
-                for i in range(4):
-                    temp = sub(temp1[(i*2):(i*2)+2])
-                    temp = '0' * (2 - len(temp)) + temp
-                    temp1 = temp1[:(i*2)] + temp + temp1[(i*2)+2:]
+                temp1 = sub(temp1)
             temp2 = expKey[len(expKey) - (8 * iterMax):]
             temp2 = temp2[:8]
             xor = hex(int(temp1, 16) ^ int(temp2, 16))[2:]

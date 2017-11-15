@@ -34,20 +34,22 @@ S_OUT = '0x630x7C0x770x7B0xF20x6B0x6F0xC50x300x010x670x2B0xFE0xD70xAB0x76'\
         '0xE10xF80x980x110x690xD90x8E0x940x9B0x1E0x870xE90xCE0x550x280xDF'\
         '0x8C0xA10x890x0D0xBF0xE60x420x680x410x990x2D0x0F0xB00x540xBB0x16'
 
-# take a hex byte and return the sbox substitution for it.
+# take a series of hex bytes and return the sbox substitution for them.
+# format for input bytes is 2 chars, lower or uppercase
 # optional argument allows for reversal with decryption
-def sub(byte, encrypt = True):
+def sub(data, encrypt = True):
     src = S_IN
     dst = S_OUT
     if encrypt == False:
         src = S_OUT
         dst = S_IN
+    retval = ''
     # make sure encoding for byte is correct
-    tmpByte = hex(int(byte, 16)).upper().replace('X','x')
-    if len(tmpByte) != 4:
-        tmpByte = tmpByte[:2] + '0' + tmpByte[2:]
-    index = src.find(tmpByte)
-    return dst[index + 2:index+len(tmpByte)]
+    for i in range(int(len(data)/2)):
+        tmpByte = '0x' + data[i*2:(i*2)+2].upper()
+        index = src.find(tmpByte)
+        retval = retval + dst[index + 2:index+len(tmpByte)]
+    return retval
 
 def main():
     for i in range(int(len(S_IN) / 4)):
