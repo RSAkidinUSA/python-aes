@@ -3,6 +3,7 @@
 from aes_expansion import expand
 from aes_crypt import crypt
 import argparse
+import sys
 
 class SmartFormatter(argparse.HelpFormatter):
 
@@ -20,34 +21,90 @@ def get_key(fileName):
         return 1
     return keyFile.readline()
 
+# get data from std in or in file
+def get_data(iName, oName, roundKeys, encrypt):
+    fin = sys.stdin
+    if iName:
+        fin = open(iName, 'r')     
+    fout = sys.stdout
+    if oName:
+        fout = open(oName, 'w')
+
+    # read data until newline or EOF
+    data = fin.read(32)
+    while (data != ''):
+        end = False
+        if ('\n' in data):
+            data = data[:data.find('\n')]
+            end = True
+        data = crypt(roundKeys, data, encrypt)
+        fout.write(data)
+        if end:
+            break
+        data = fin.read(32)
+        
+    '''
+    data = 'FFFEFDFCFBFAF9F8F7F6F5F4F3F2F1F0'
+    print("Plaintext:\t%s" % (data,))
+    print("Ciphertext:\t%s" % (crypt(roundKeys, data),))
+    '''
+
+    if iName:
+        fin.close()
+    if oName:
+        fout.close()
+
+# function to parse arguments
 def parse():
     parser = argparse.ArgumentParser(description='Encrypt or Decrypt a file'\
                                      ' with AES128, AES192, or AES256.',
                                      formatter_class=SmartFormatter)
-    parser.add_argument('key_file', type=str, nargs=1,
+    parser.add_argument('key_file',
+                        type=str, nargs=1,
                         help='The file storing the 128, '\
                         '192, or 256 bit key as text')
-    parser.add_argument('-f', metavar='input_file', type=str, nargs=1,
+    parser.add_argument('-f', metavar='input_file',
+                        type=str, nargs=1,
                         help='R|The file storing the text to be '\
                         '(en/de)crypted.\n'\
                         'If not used, input must come from stdin.')
-    parser.add_argument('-o', metavar='output_file', type=str, nargs=1,
+    parser.add_argument('-o', metavar='output_file',
+                        type=str, nargs=1,
                         help='R|The file to store the '\
                         '(en/de)crypted text in.\n'\
                         'If not used, output will go to stdout.')
+    parser.add_argument('-d', action='store_false',
+                        help='Decrypt the file instead of encrypting')
+    
     return parser.parse_args()
 
+# main function
 def main():
     args = parse()
+    f = None
+    o = None
+    # test input and output files
+    if (args.f):
+        try:
+            open(''.join(args.f), 'r')
+            f = ''.join(args.f)
+        except:
+            print("Unable to open the provided input file")
+            return 2
+    if (args.o):
+        try:
+            open(''.join(args.o), 'w')
+            o = ''.join(args.o)
+        except:
+            print("Unable to open the provided output file")
+            return 3
     key = get_key(''.join(args.key_file))
     if key == 1:
         return 1
     roundKeys = expand(key)
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
-    data = 'FFFEFDFCFBFAF9F8F7F6F5F4F3F2F1F0'
-    print("Plaintext:\t%s" % (data,))
-    print("Ciphertext:\t%s" % (crypt(roundKeys, data),))
+    get_data(f, o, roundKeys, args.d)
 
 if __name__ == '__main__':
     main()
