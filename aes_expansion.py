@@ -55,14 +55,15 @@ def expand(key):
             xor = '0' * (8 - len(xor)) + xor
             expKey = expKey + xor
     expKey = expKey[:expKeyLen]
+    # Debugging info
     print("Expanded key length: %d" % (len(expKey) / 2,))
     roundKeys = []
     print("Keys:")
     for i in range(numRounds + 1):
+        # DONT DELETE THIS LINE PLZ
         roundKeys.append(expKey[i*32:(i+1)*32])
         print("Round %d:\t%s" % (i, roundKeys[i]))
-    # Check if keys match
-    # print("roundKeys == expKey: %s" % ("True" if (''.join(roundKeys) == expKey) else "False",))
+    # End debugging info
     return roundKeys
     
     

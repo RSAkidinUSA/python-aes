@@ -1,6 +1,7 @@
 #/usr/bin/python3
 # aes_main.py: code for reading in a file and calling the proper AES functions
 from aes_expansion import expand
+from aes_crypt import crypt
 import argparse
 
 class SmartFormatter(argparse.HelpFormatter):
@@ -44,6 +45,9 @@ def main():
     roundKeys = expand(key)
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
+    data = 'FFFEFDFCFBFAF9F8F7F6F5F4F3F2F1F0'
+    print("Plaintext:\t%s" % (data,))
+    print("Ciphertext:\t%s" % (crypt(roundKeys, data),))
 
 if __name__ == '__main__':
     main()
