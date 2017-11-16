@@ -31,24 +31,24 @@ def get_data(iName, oName, roundKeys, encrypt):
         fout = open(oName, 'w')
 
     # read data until newline or EOF
-    data = fin.read(32)
-    while (data != ''):
-        end = False
-        if ('\n' in data):
-            data = data[:data.find('\n')]
-            end = True
-        data = crypt(roundKeys, data, encrypt)
-        fout.write(data)
-        if end:
-            break
-        data = fin.read(32)
-        
-    '''
-    data = 'FFFEFDFCFBFAF9F8F7F6F5F4F3F2F1F0'
-    print("Plaintext:\t%s" % (data,))
-    print("Ciphertext:\t%s" % (crypt(roundKeys, data),))
-    '''
-
+    data = ''
+    done = False
+    count = 1
+    while (not done):
+        c = fin.read(1)
+        count = count + 1
+        if c == '' or c == '\n':
+            done = True
+        else:
+            data = data + c
+        if done or count == 32:
+            print(data)
+            data = crypt(roundKeys, data, encrypt)
+            print(data)
+            fout.write(data)
+            count = 1
+            data = ''
+            
     if iName:
         fin.close()
     if oName:
