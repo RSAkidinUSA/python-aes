@@ -12,7 +12,12 @@ class SmartFormatter(argparse.HelpFormatter):
         return argparse.HelpFormatter._split_lines(self, text, width)
 
 def get_key(fileName):
-    return '000102030405060708090a0b0c0d0e0f'
+    try:
+        keyFile = open(fileName, 'r')
+    except:
+        print("File %s does not exist" % (fileName,))
+        return 1
+    return keyFile.readline()
 
 def parse():
     parser = argparse.ArgumentParser(description='Encrypt or Decrypt a file'\
@@ -29,12 +34,13 @@ def parse():
                         help='R|The file to store the '\
                         '(en/de)crypted text in.\n'\
                         'If not used, output will go to stdout.')
-    args = parser.parse_args()
+    return parser.parse_args()
 
 def main():
-    #arg parse
-    parse()
-    key = get_key('file.txt')
+    args = parse()
+    key = get_key(''.join(args.key_file))
+    if key == 1:
+        return 1
     roundKeys = expand(key)
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
