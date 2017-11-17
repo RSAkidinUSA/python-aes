@@ -16,7 +16,6 @@ def core(val):
     ret = swap + ret[2:]
     roundNum = roundNum + 1
     return ret
-    
 
 # Take an input key of a 128, 192, or 256 bits and return an array of round keys
 def expand(key):
@@ -32,9 +31,9 @@ def expand(key):
     numRounds = 10 + int((keylen - 128) / 32)
     # 16 byte keys, 1 byte = 2 chars
     expKeyLen = (numRounds + 1) * 16 * 2
-    
-    print("Key length: %d\nNumber of rounds: %d" \
-          %(keylen, numRounds))
+    if not __debug__:
+        print("Key length: %d\nNumber of rounds: %d" \
+              %(keylen, numRounds))
     
     expKey = key
     global roundNum
@@ -55,15 +54,17 @@ def expand(key):
             xor = '0' * (8 - len(xor)) + xor
             expKey = expKey + xor
     expKey = expKey[:expKeyLen]
-    # Debugging info
-    print("Expanded key length: %d" % (len(expKey) / 2,))
+    # debugging info
+    if not __debug__:
+        print("Expanded key length: %d" % (len(expKey) / 2,))
     roundKeys = []
-    print("Keys:")
+    if not __debug__:
+        print("Keys:")
     for i in range(numRounds + 1):
-        # DONT DELETE THIS LINE PLZ
         roundKeys.append(expKey[i*32:(i+1)*32])
-        print("Round %d:\t%s" % (i, roundKeys[i]))
-    # End debugging info
+        if not __debug__:
+            print("Round %d:\t%s" % (i, roundKeys[i]))
+    # end debugging info
     return roundKeys
     
     

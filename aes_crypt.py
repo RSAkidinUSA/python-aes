@@ -31,19 +31,24 @@ def crypt(roundKeys, data, encrypt=True):
     numRounds = len(roundKeys) - 1
     # Begin algorithm
     data = add_key(roundKeys[0], data)
-    print("Data at round %d:\t%s" % (0, data))
+    # debugging info
+    if not __debug__:
+        print("Data at round %d:\t%s" % (0, data))
     # main loop
     for i in range(1, numRounds):
         data = sub(data)
         data = shift_rows(data)
         data = mix_cols(data)
-        data = add_key(roundKeys[i], data)        
-        print("Data at round %d:\t%s" % (i, data))
+        data = add_key(roundKeys[i], data)
+        if not __debug__:
+            print("Data at round %d:\t%s" % (i, data))
     # final step
     data = sub(data)
     data = shift_rows(data)
     data = add_key(roundKeys[numRounds], data)
-    print("Data at round %d:\t%s" % (numRounds, data))
+    if not __debug__:
+        print("Data at round %d:\t%s" % (numRounds, data))
+    # end debugging
     return data
     
 
