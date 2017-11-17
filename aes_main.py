@@ -1,6 +1,6 @@
 #/usr/bin/python3
 # aes_main.py: code for reading in a file and calling the proper AES functions
-from aes_expansion import expand
+from aes_keys import expand
 from aes_crypt import crypt
 import argparse
 import sys
