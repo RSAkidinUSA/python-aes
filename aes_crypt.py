@@ -3,11 +3,11 @@
 from aes_sbox import sub
 
 # shift rows
-def shift_rows(data):
+def shift_rows(data, encrypt=True):
     return data
 
 # mix columns
-def mix_cols(data):
+def mix_cols(data, encrypt=True):
     return data
 
 # add a round key to data and convert back to the string format we like
@@ -36,9 +36,9 @@ def crypt(roundKeys, data, encrypt=True):
         print("Data at round %d:\t%s" % (0, data))
     # main loop
     for i in range(1, numRounds):
-        data = sub(data)
-        data = shift_rows(data)
-        data = mix_cols(data)
+        data = sub(data, encrypt)
+        data = shift_rows(data, encrypt)
+        data = mix_cols(data, encrypt)
         data = add_key(roundKeys[i], data)
         if not __debug__:
             print("Data at round %d:\t%s" % (i, data))

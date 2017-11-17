@@ -31,9 +31,6 @@ def expand(key):
     numRounds = 10 + int((keylen - 128) / 32)
     # 16 byte keys, 1 byte = 2 chars
     expKeyLen = (numRounds + 1) * 16 * 2
-    if not __debug__:
-        print("Key length: %d\nNumber of rounds: %d" \
-              %(keylen, numRounds))
     
     expKey = key
     global roundNum
@@ -47,11 +44,7 @@ def expand(key):
             if i == 0:
                 temp1 = core(temp1)
             if (i == 4) and (iterMax == 8):
-                if not __debug__:
-                    print('before: ' + temp1)
                 temp1 = sub(temp1)
-                if not __debug__:
-                    print('after: ' + temp1)
             temp2 = expKey[len(expKey) - (8 * iterMax):]
             temp2 = temp2[:8]
             xor = hex(int(temp1, 16) ^ int(temp2, 16))[2:].upper()
@@ -59,21 +52,14 @@ def expand(key):
             expKey = expKey + xor                 
     expKey = expKey[:expKeyLen]
     # debugging info
-    if not __debug__:
-        print("Expanded key length: %d" % (len(expKey) / 2,))
     roundKeys = []
-    if not __debug__:
-        print("Keys:")
     for i in range(numRounds + 1):
         roundKeys.append(expKey[i*32:(i+1)*32])
-        if not __debug__:
-            print("Round %d:\t%s" % (i, roundKeys[i]))
     # end debugging info
     return roundKeys
     
     
 def main():
-    '''
     key1 = ''.join(expand('000102030405060708090A0B0C0D0E0F'))
     key1_expand = '000102030405060708090A0B0C0D0E0F'\
                   'D6AA74FDD2AF72FADAA678F1D6AB76FE'\
@@ -113,17 +99,17 @@ def main():
                   '1EBF765ADAE3B43BDBC26E99F5A66A556A6D4D144511AE23'\
                   '1C5B5034C6B8E40F1D7A8A96E8DCE0C382B1ADD7C7A003F4'[:len(key3)]
     print('Key3:\n%s\nKey3 expanded:\n%s\nequal:%s\n' % (key3,key3_expand,key3==key3_expand))
-    '''
+    
     
     key4 = ''.join(expand('54D1C20A0D7B90A27E8099BFEC6245ADDE4FCAB68F6C18A2C5B07B56AA1E300F'))
     key4_expand = '54D1C20A0D7B90A27E8099BFEC6245ADDE4FCAB68F6C18A2C5B07B56AA1E300F'\
-                  '27D5B4A62AAE2404542EBDBBB84CF847B2668BF13D0A9353F8BAE80552A4D80A'\
-                  '6FB4D3A6451AF7A211344A19A978B29361DABC625CD02F31A46AC734F6CE1F3E'\
-                  'E57461E4A06E9646B15ADC5F18226E5CCC49233E90990C0F34F3CB3BC23DD405'\
-                  'C33C0AC163529C87D20840D8CA2A2E3DB8AC120328351E0C1CC6D537DEFB0132'\
-                  'CD4029DCAE12B55B7C1AF583B630DBD1F6A8ABD2DE9DB5DEC25B60E91CA061DB'\
-                  '2CAF904082BD251BFEA7D09848970B97A42080457ABD359BB8E65572A44634A9'\
-                  '77B74309F50A66120BADB68A433ABDE9BEA0FAACC41DCF377CFB9A45D8BDAEEC'[:len(key4)]
+                  '27D5B4A62AAE2404542EBDBBB84CF816B2668BF13D0A9353F8BAE80552A4D80A'\
+                  '6CB4D3A6461AF7A212344A19AA78B20F1EDABC8723D02FD4DB6AC7D189CE1FDB'\
+                  'E3746A01A56E9DA3B75AD7BA1D2265B5BA49F1529999DE8642F31957CB3D068C'\
+                  'CC1B0E1E697593BDDE2F4407C30D21B2949E0C650D07D2E34FF4CBB484C9CD38'\
+                  '01A6094168D39AFCB6FCDEFB75F1FF49093F1A5E0438C8BD4BCC0309CF05CE31'\
+                  '4A2DCECB22FE543794028ACCE1F37585F13287C9F50A4F74BEC64C7D71C3824C'\
+                  '243EE76806C0B35F92C2399373314C167EF5AE8E8BFFE1FA3539AD8744FA2FCB'[:len(key4)]
     print('Key4:\n%s\nKey4 expanded:\n%s\nequal:%s\n' % (key4,key4_expand,key4==key4_expand))
     
 
