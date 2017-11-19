@@ -1,8 +1,7 @@
 #/usr/bin/python3
 # aes_crypt.py: code for encrypting and decrypting
 from aes_sbox import sub
-from aes_shift import shift_rows
-from aes_mix import mix_cols
+from aes_matrix import shift_rows, mix_cols
 
 # add a round key to data and convert back to the string format we like
 def add_key(key, data):
