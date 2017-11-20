@@ -25,15 +25,13 @@ def matToStr(data):
 def shift_rows(data, encrypt=True):
     # convert string to matrix
     ret = strToMat(data)
+    popLoc = 0 if encrypt else 3
+    insLoc = 3 if encrypt else 0
     # shift
     for i in range(1, 4):
         for j in range(i):
-            if (encrypt):
-                temp = ret[i].pop(0)
-                ret[i].append(temp)
-            else:
-                temp = ret[i].pop(3)
-                ret[i].insert(0, temp)
+            temp = ret[i].pop(popLoc)
+            ret[i].insert(insLoc, temp)
     # convert matrix back to string 
     ret = matToStr(ret)
     return ret
