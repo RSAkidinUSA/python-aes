@@ -18,7 +18,7 @@ def core(val):
     return ret
 
 # Take an input key of a 128, 192, or 256 bits and return an array of round keys
-def expand(key):
+def expand(key, encrypt=True):
     try:
         test = int(key, 16)        
     except:
@@ -56,6 +56,8 @@ def expand(key):
     for i in range(numRounds + 1):
         roundKeys.append(expKey[i*32:(i+1)*32])
     # end debugging info
+    if not encrypt:
+        roundKeys.reverse()
     return roundKeys
     
     

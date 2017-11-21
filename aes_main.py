@@ -35,40 +35,6 @@ def get_data(fin, asBytes=False):
             return data
         data = data + c
     return data
-'''
-# get data from std in or in file
-def get_data(iName, oName, roundKeys, encrypt):
-    fin = sys.stdin
-    if iName:
-        fin = open(iName, 'r')     
-    fout = sys.stdout
-    if oName:
-        fout = open(oName, 'w')
-
-    # read data until newline or EOF
-    data = ''
-    done = False
-    count = 1
-    while (not done):
-        c = fin.read(1)
-        count = count + 1
-        if c == '' or c == '\n':
-            done = True
-        else:
-            data = data + c
-        if done or count == 32:
-            print(data)
-            data = crypt(roundKeys, data, encrypt)
-            print(data)
-            fout.write(data)
-            count = 1
-            data = ''
-            
-    if iName:
-        fin.close()
-    if oName:
-        fout.close()
-'''
 
 def write_data(fout, data, asBytes=False):
     if (not asBytes):
@@ -126,7 +92,7 @@ def main():
     key = get_key(''.join(args.key_file))
     if key == 1:
         return 1
-    roundKeys = expand(key)
+    roundKeys = expand(key, (not args.d))
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
     global done

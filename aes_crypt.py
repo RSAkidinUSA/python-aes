@@ -37,7 +37,7 @@ def crypt(roundKeys, data, encrypt=True):
             print("Data at round %d:\t%s" % (i, data))
     # final step
     data = sub(data)
-    data = shift_rows(data)
+    data = shift_rows(data, encrypt)
     data = add_key(roundKeys[numRounds], data)
     if not __debug__:
         print("Data at round %d:\t%s" % (numRounds, data))
