@@ -51,11 +51,9 @@ def expand(key, encrypt=True):
             xor = '0' * (8 - len(xor)) + xor
             expKey = expKey + xor                 
     expKey = expKey[:expKeyLen]
-    # debugging info
     roundKeys = []
     for i in range(numRounds + 1):
         roundKeys.append(expKey[i*32:(i+1)*32])
-    # end debugging info
     if not encrypt:
         roundKeys.reverse()
     return roundKeys

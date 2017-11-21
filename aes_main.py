@@ -1,7 +1,7 @@
 #/usr/bin/python3
 # aes_main.py: code for reading in a file and calling the proper AES functions
 from aes_keys import expand
-from aes_crypt import crypt
+from aes_crypt import encrypt, decrypt
 import argparse
 import sys
 
@@ -98,8 +98,9 @@ def main():
     global done
     done = False
     data = get_data(fin, args.b)
+    crypt = decrypt if args.d else encrypt
     while data != '':
-        data = crypt(roundKeys, data, (not args.d))
+        data = crypt(roundKeys, data)
         write_data(fout, data, args.b)
         data = get_data(fin, args.b)
 

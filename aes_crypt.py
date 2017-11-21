@@ -43,6 +43,49 @@ def crypt(roundKeys, data, encrypt=True):
         print("Data at round %d:\t%s" % (numRounds, data))
     # end debugging
     return data
+
+# function to decrypt data with a given set of keys
+# input is 128 bytes or less
+# data is a string of hex values
+# keys should be reversed
+def decrypt(roundKeys, data):
+    if len(data) < 32:
+        data = data + '0' * (32 - len(data))
+    elif len(data) > 32:
+        print("Too much data given...")
+        return -1
+
+# function to encrypt data with a given set of keys
+# input is 128 bytes or less
+# data is a string of hex values
+def encrypt(roundKeys, data):
+    if len(data) < 32:
+        data = data + '0' * (32 - len(data))
+    elif len(data) > 32:
+        print("Too much data given...")
+        return -1
+    numRounds = len(roundKeys) - 1
+    # Begin algorithm
+    data = add_key(roundKeys[0], data)
+    # debugging info
+    if not __debug__:
+        print("Data at round %d:\t%s" % (0, data))
+    # main loop
+    for i in range(1, numRounds):
+        data = sub(data, encrypt)
+        data = shift_rows(data, encrypt)
+        data = mix_cols(data, encrypt)
+        data = add_key(roundKeys[i], data)
+        if not __debug__:
+            print("Data at round %d:\t%s" % (i, data))
+    # final step
+    data = sub(data)
+    data = shift_rows(data, encrypt)
+    data = add_key(roundKeys[numRounds], data)
+    if not __debug__:
+        print("Data at round %d:\t%s" % (numRounds, data))
+    # end debugging
+    return data
     
 
 def main():
