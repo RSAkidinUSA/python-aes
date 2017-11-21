@@ -4,6 +4,7 @@
 # shift rows
 # data is stored in array of arrays
 # first index is row, second is column
+from aes_mult import multiply, modz
 
 # convert strig to matrix
 def strToMat(data):
@@ -36,12 +37,42 @@ def shift_rows(data, encrypt=True):
     ret = matToStr(ret)
     return ret
 
+mixMat = [['0x02','0x03','0x01','0x01'],
+          ['0x01','0x02','0x03','0x01'],
+          ['0x01','0x01','0x02','0x03'],
+          ['0x03','0x01','0x01','0x02']]
+
+invMat = [['0x0E','0x0B','0x0D','0x09'],
+          ['0x09','0x0E','0x0B','0x0D'],
+          ['0x0D','0x09','0x0E','0x0B'],
+          ['0x0B','0x0D','0x09','0x0E']]
+
 # mix columns
 def mix_cols(data, encrypt=True):
+    multMat = mixMat if encrypt else invMat
     # convert string to matrix
-    ret = strToMat(data)
+    tmpMat = strToMat(data)
+    ret = []
+    # each column of data
+    for i in range(4):
+        ret.append([])
+        # each row of mult matrix
+        for j in range(4):
+            tmp = 0
+            # each item in the row
+            for k in range(4):
+                tmp = tmp ^ int(multiply(multMat[j][k], tmpMat[k][i]), 16)
+            tmp = modz(tmp)
+            # convert to string
+            tmp = hex(tmp)[2:].upper()
+            if len(tmp) % 2:
+                tmp = '0' + tmp
+            ret[i].append(tmp)
     # convert matrix back to string
-    ret = matToStr(ret)
+    tmp = []
+    for i in range(4):
+        tmp.append(''.join(ret[i]))
+    ret = ''.join(tmp)
     return ret
 
 def main():
