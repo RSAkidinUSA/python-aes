@@ -24,7 +24,7 @@ def get_key(fileName):
 done = False
 lastCipher = '0' * 32
 # get data from std in or in file
-def get_data(fin, asBytes=False, CBCmode=False):
+def get_data(fin, asBytes=False):
     global done
     if done:
         return ''
@@ -35,11 +35,16 @@ def get_data(fin, asBytes=False, CBCmode=False):
             done = True
             break
         data = data + c
-    # xor p_i with c_i-1
-    if CBCmode and len(data):
-        data = int(lastCipher, 16) ^ int(data, 16)
-        data = hex(data)[2:]
     return data
+
+def CBC(data, lastCipher):
+    # pad
+    temp = data + ('0' * (32 - len(data)))
+    temp = int(lastCipher, 16) ^ int(temp, 16)
+    temp = hex(temp)[2:]
+    # fix length
+    temp = ('0' * (32 - len(temp))) + temp
+    return temp    
 
 def write_data(fout, data, asBytes=False):
     if (not asBytes):
@@ -105,16 +110,19 @@ def main():
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
     global done
-    global lastCipher
     done = False
     lastCipher = '0' * 32
-    data = get_data(fin, args.b, args.c)
+    data = get_data(fin, args.b)
     crypt = decrypt if args.d else encrypt
     while data != '':
+        if args.c and not args.d:
+            data = CBC(data, lastCipher) 
         crypt_data = crypt(roundKeys, data)
+        if args.c and args.d:
+            crypt_data = CBC(crypt_data, lastCipher)
         lastCipher = data if args.d else crypt_data
         write_data(fout, crypt_data, args.b)
-        data = get_data(fin, args.b, args.c)
+        data = get_data(fin, args.b)
 
 if __name__ == '__main__':
     main()
