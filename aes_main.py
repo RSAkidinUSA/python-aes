@@ -22,8 +22,9 @@ def get_key(fileName):
     return keyFile.readline()
 
 done = False
+lastCipher = '0' * 32
 # get data from std in or in file
-def get_data(fin, asBytes=False):
+def get_data(fin, asBytes=False, CBCmode=False):
     global done
     if done:
         return ''
@@ -32,8 +33,12 @@ def get_data(fin, asBytes=False):
         c = fin.read(1)
         if c == '' or c == '\n':
             done = True
-            return data
+            break
         data = data + c
+    # xor p_i with c_i-1
+    if CBCmode and len(data):
+        data = int(lastCipher, 16) ^ int(data, 16)
+        data = hex(data)[2:]
     return data
 
 def write_data(fout, data, asBytes=False):
@@ -64,10 +69,14 @@ def parse():
                         '(en/de)crypted text in.\n'\
                         'If not used, output will go to stdout.')
     parser.add_argument('-d', action='store_true',
-                        help='Decrypt the file instead of encrypting')
+                        help='Decrypt the file instead of encrypting.')
     parser.add_argument('-b', action='store_true',
                         help='R|Read and write files as bytes.\n'\
                         'If not set, read and write characters as hex values.')
+    parser.add_argument('-c', action='store_true',
+                        help='R|CBC mode. IV is set to zero (this may'\
+                        ' be changed\nin the future).\nIf not used, ECB'\
+                        ' mode will be used.')
     
     return parser.parse_args()
 
@@ -96,13 +105,16 @@ def main():
     if (type(roundKeys) != list):
         print("Error #%d" % (roundKeys,))
     global done
+    global lastCipher
     done = False
-    data = get_data(fin, args.b)
+    lastCipher = '0' * 32
+    data = get_data(fin, args.b, args.c)
     crypt = decrypt if args.d else encrypt
     while data != '':
-        data = crypt(roundKeys, data)
-        write_data(fout, data, args.b)
-        data = get_data(fin, args.b)
+        crypt_data = crypt(roundKeys, data)
+        lastCipher = data if args.d else crypt_data
+        write_data(fout, crypt_data, args.b)
+        data = get_data(fin, args.b, args.c)
 
 if __name__ == '__main__':
     main()
