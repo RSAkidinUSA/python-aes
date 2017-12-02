@@ -26,13 +26,23 @@ for i in "$@"; do
 
 	python3 aes_main.py -f $i"/"*$PLAIN* -o $i"/out-ecb" \
 		$i"/"*$KEY*
+	if (( $? != 0 )); then
+		echo "ECB code errored out..."
+		exit 3
+	fi
+
 	python3 aes_main.py -f $i"/"*$PLAIN* -o $i"/out-cbc" \
 		$i"/"*$KEY* -c
 
+	if (( $? != 0 )); then
+		echo "CBC code errored out..."
+		exit 3
+	fi
+
 	diff -i $i"/out-ecb" $i"/"*$CIPHER*"-ecb"*
 	if (( $? != 0 )); then
-		echo "Failed ECB!"
-		exit 3
+		echo "Failed ECB! (outputs didn't match)"
+		exit 4
 	else
 		echo "Passed ECB!"
 	fi
@@ -40,7 +50,7 @@ for i in "$@"; do
 
 	diff -i $i"/out-cbc" $i"/"*$CIPHER*"-cbc"*
 	if (( $? != 0 )); then
-		echo "Failed CBC!"
+		echo "Failed CBC! (outputs didn't match)"
 		exit 4
 	else
 		echo "Passed CBC!"
