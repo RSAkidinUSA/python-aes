@@ -1,6 +1,6 @@
 #/usr/bin/python3
 # aes_inv.py code for the inverse for aes
-from aes_mult import aes_b, modz, multiply
+from aes_mult import aes_b, modz, multiply, hex
 
 #takes ints, returns tuple of quotient and remainder
 def divide(x, y):
@@ -36,7 +36,7 @@ def inverse(x, b=aes_b):
         ix = tempr
         tempq, tempr = divide(ix, tempdiv)
 
-    ret = hex(EEA(q_list))[2:].upper()
+    ret = hex(EEA(q_list))
     if len(ret) % 2:
         ret = '0' + ret
     return ret

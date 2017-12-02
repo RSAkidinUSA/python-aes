@@ -1,7 +1,7 @@
 #/usr/bin/python3
 # aes_expansion.py code for computing the key expansion for aes
 from aes_inv import inverse
-from aes_mult import modz
+from aes_mult import modz, hex
 from aes_sbox import sub
 
 # key expansion core for 4byte string (hex)
@@ -12,7 +12,7 @@ def core(val):
     RCon = modz(1 << roundNum)
     val = val[2:] + val[:2]
     ret = sub(val)
-    swap = hex(int(ret[:2], 16) ^ RCon).upper()[2:]
+    swap = hex(int(ret[:2], 16) ^ RCon)
     ret = swap + ret[2:]
     roundNum = roundNum + 1
     return ret
@@ -47,7 +47,7 @@ def expand(key, encrypt=True):
                 temp1 = sub(temp1)
             temp2 = expKey[len(expKey) - (8 * iterMax):]
             temp2 = temp2[:8]
-            xor = hex(int(temp1, 16) ^ int(temp2, 16))[2:].upper()
+            xor = hex(int(temp1, 16) ^ int(temp2, 16))
             xor = '0' * (8 - len(xor)) + xor
             expKey = expKey + xor                 
     expKey = expKey[:expKeyLen]

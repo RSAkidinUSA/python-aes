@@ -1,14 +1,14 @@
 #/usr/bin/python3
 # aes_crypt.py: code for encrypting and decrypting
 from aes_sbox import sub
-from aes_matrix import shift_rows, mix_cols
+from aes_matrix import shift_rows, mix_cols, hex
 
 # add a round key to data and convert back to the string format we like
 def add_key(key, data):
     iKey = int(key, 16)
     iData = int(data,16)
     iTmp = iKey ^ iData
-    sTmp = hex(iTmp).replace('0x','').upper()
+    sTmp = hex(iTmp)
     sTmp = '0' * (32 - len(sTmp)) + sTmp
     return sTmp
 

@@ -2,6 +2,9 @@
 # aes_mult.py code for the multiplication for aes
 aes_b = 0b100011011
 
+def hex(a):
+    return ("%x" % a).upper()
+
 # takes an integer base and x and does modz
 def modz(x, b=aes_b):
     while len(bin(x)) >= len(bin(b)):
@@ -21,7 +24,7 @@ def multiply(x, y, b=aes_b):
 
     # mod b
     ret = modz(ret, b)
-    ret = hex(ret)[2:].upper()
+    ret = hex(ret).upper()
     if len(ret) % 2:
         ret = '0' + ret
     return ret

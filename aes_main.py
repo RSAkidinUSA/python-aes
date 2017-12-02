@@ -2,6 +2,7 @@
 # aes_main.py: code for reading in a file and calling the proper AES functions
 from aes_keys import expand
 from aes_crypt import encrypt, decrypt
+from aes_mult import hex
 import argparse
 import sys
 
@@ -41,7 +42,7 @@ def CBC(data, lastCipher):
     # pad
     temp = data + ('0' * (32 - len(data)))
     temp = int(lastCipher, 16) ^ int(temp, 16)
-    temp = hex(temp)[2:]
+    temp = hex(temp)
     # fix length
     temp = ('0' * (32 - len(temp))) + temp
     return temp    

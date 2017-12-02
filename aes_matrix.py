@@ -4,7 +4,7 @@
 # shift rows
 # data is stored in array of arrays
 # first index is row, second is column
-from aes_mult import multiply, modz
+from aes_mult import multiply, modz, hex
 
 # convert strig to matrix
 def strToMat(data):
@@ -64,7 +64,7 @@ def mix_cols(data, encrypt=True):
                 tmp = tmp ^ int(multiply(multMat[j][k], tmpMat[k][i]), 16)
             tmp = modz(tmp)
             # convert to string
-            tmp = hex(tmp)[2:].upper()
+            tmp = hex(tmp)
             if len(tmp) % 2:
                 tmp = '0' + tmp
             ret[i].append(tmp)
