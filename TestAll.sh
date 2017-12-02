@@ -4,8 +4,9 @@ CIPHER="ciphertext"
 KEY="key"
 FILES="$PLAIN $CIPHER*-cbc $CIPHER*-ecb $KEY"
 
-if (( $# < 1 )); then
-	echo "Usage: TestAll.sh [dir]..."
+if [ "$#" -lt "1" ] || [ "$1" == "-h" ] \
+	|| [ "$1" == "--help" ]; then
+	echo "Usage: TestAll.sh [DIR]..."
 	exit 1
 fi
 
