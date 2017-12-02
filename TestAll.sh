@@ -1,26 +1,47 @@
 #/bin/bash
-PLAIN="/aes-plaintext"*".txt"
-CIPHER="/aes-ciphertext"*
-KEY="/aes-key"*".txt"
+PLAIN="plaintext"
+CIPHER="ciphertext"
+KEY="key"
+FILES="$PLAIN $CIPHER*-cbc $CIPHER*-ecb $KEY"
 
-for i in $(ls -d testing/test*); do
-	echo $i
-	python3 aes_main.py -f $i$PLAIN -o $i"/out-ecb" $i$KEY
-	python3 aes_main.py -f $i$PLAIN -o $i"/out-cbc" $i$KEY -c
+if (( $# < 1 )); then
+	echo "Usage: TestAll.sh [dir]..."
+	exit 1
+fi
 
-	diff -i $i"/out-ecb" $i$CIPHER"-ecb.txt"
+for i in "$@"; do
+	echo $i":"
+	
+	ERR=0
+	for j in $FILES; do
+		ls $i"/"*$j* >/dev/null 2>/dev/null
+		if (( $? != 0 )); then
+			echo "Directory missing $j file."
+			ERR=2
+		fi
+	done
+	if (( $ERR != 0 )); then
+		exit $ERR
+	fi
+
+	python3 aes_main.py -f $i"/"*$PLAIN* -o $i"/out-ecb" \
+		$i"/"*$KEY*
+	python3 aes_main.py -f $i"/"*$PLAIN* -o $i"/out-cbc" \
+		$i"/"*$KEY* -c
+
+	diff -i $i"/out-ecb" $i"/"*$CIPHER*"-ecb"*
 	if (( $? != 0 )); then
 		echo "Failed ECB!"
-		return
+		exit 3
 	else
 		echo "Passed ECB!"
 	fi
 	rm $i"/out-ecb"
 
-	diff -i $i"/out-cbc" $i$CIPHER"-cbc.txt"
+	diff -i $i"/out-cbc" $i"/"*$CIPHER*"-cbc"*
 	if (( $? != 0 )); then
 		echo "Failed CBC!"
-		return
+		exit 4
 	else
 		echo "Passed CBC!"
 	fi
