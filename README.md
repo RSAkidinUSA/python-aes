@@ -10,6 +10,7 @@ I am too stuborn to go back and change them to be more efficient and easier.
 I have many regrets.
 I may come back and change this at a later time.
 
+```
 usage: python3 [-O] aes_main.py [-h] [-f input_file] [-o output_file] [-d] [-b] [-c]
                    key_file
 
@@ -20,7 +21,7 @@ positional arguments:
   key_file        The file storing the 128, 192, or 256 bit key as text
 
 optional arguments:
-  -h, --help      show this help message and exit
+  -h, --help      show this help message and exit\n
   -f input_file   The file storing the text to be (en/de)crypted.
                   If not used, input must come from stdin.
                   If a newline character is reached without the -b flag,
@@ -33,3 +34,4 @@ optional arguments:
   -c              CBC mode. IV is set to zero (this may be changed
                   in the future).
                   If not used, ECB mode will be used.
+```
