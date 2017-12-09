@@ -3,7 +3,10 @@
 aes_b = 0b100011011
 
 def hex(a):
-    return ("%x" % a).upper()
+    ret = ("%x" % a).upper()
+    if len(ret) % 2:
+        ret = '0' + ret
+    return ret
 
 # takes an integer base and x and does modz
 def modz(x, b=aes_b):

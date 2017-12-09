@@ -12,7 +12,7 @@ I may come back and change this at a later time.
 
 ```
 usage: python3 [-O] aes_main.py [-h] [-f input_file] [-o output_file] [-d] [-b] [-c]
-                   key_file
+                    key_file
 
 Encrypt or Decrypt a file with AES128, AES192, or AES256. Run with -O flag to
 enable debugging
