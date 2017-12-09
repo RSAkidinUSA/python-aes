@@ -77,7 +77,7 @@ def parse():
     parser.add_argument('-d', action='store_true',
                         help='Decrypt the file instead of encrypting.')
     parser.add_argument('-b', action='store_true',
-                        help='R|Read and write files as bytes.\n'\
+                        help='R|Read and write files as bytes. (Not yet implemented).\n'\
                         'If not set, read and write characters as hex values.')
     parser.add_argument('-c', action='store_true',
                         help='R|CBC mode. IV is set to zero (this may'\
