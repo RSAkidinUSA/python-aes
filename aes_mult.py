@@ -27,9 +27,7 @@ def multiply(x, y, b=aes_b):
 
     # mod b
     ret = modz(ret, b)
-    ret = hex(ret).upper()
-    if len(ret) % 2:
-        ret = '0' + ret
+    ret = hex(ret)
     return ret
 
 def main():

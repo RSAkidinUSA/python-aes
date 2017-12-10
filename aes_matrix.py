@@ -65,8 +65,6 @@ def mix_cols(data, encrypt=True):
             tmp = modz(tmp)
             # convert to string
             tmp = hex(tmp)
-            if len(tmp) % 2:
-                tmp = '0' + tmp
             ret[i].append(tmp)
     # convert matrix back to string
     tmp = []
