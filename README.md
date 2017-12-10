@@ -35,3 +35,10 @@ optional arguments:
                   in the future).
                   If not used, ECB mode will be used.
 ```
+
+testFiles.sh is used to verify the code works as expected.  
+It expects a directory containing 4 files the following naming convention:  
+1. \*plaintext\*
+2. \*cipher\*-cbc\*
+3. \*cipher\*-ecb\*
+4. \*key\*
